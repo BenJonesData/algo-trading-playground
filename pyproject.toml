@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "algo-trading-playground"
+version = "0.1.0"
+description = "A repository for experimenting with and backtesting simple algorithmic trading strategies, designed to build a foundational understanding of trading algorithms and performance evaluation."
+authors = ["Ben Jones <benjones1479@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+numpy = "^2.1.1"
+pandas = "^2.2.3"
+matplotlib = "^3.9.2"
+bt = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
