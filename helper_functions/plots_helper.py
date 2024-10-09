@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 def create_candlestick(data: pd.DataFrame) -> go.Candlestick:
@@ -101,5 +101,5 @@ def plot_position(
     ax2.set_ylabel("Position Size", color="blue")
     ax2.tick_params(axis="y", labelcolor="blue")
 
-    plt.title(f"{asset_label} Price and Strategy Position Size Over Time")
+    plt.title(f"{asset_label} Price and Position Size Over Time")
     plt.show()
