@@ -1,5 +1,6 @@
 import plotly.graph_objects as go
 import pandas as pd
+import matplotlib as plt
 
 
 def create_candlestick(data: pd.DataFrame) -> go.Candlestick:
@@ -46,7 +47,9 @@ def create_candlestick(data: pd.DataFrame) -> go.Candlestick:
         col for col in required_columns if col not in data.columns
     ]  # find required columns not present in data
     if missing_columns:
-        raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
+        raise ValueError(
+            f"Missing required columns: {', '.join(missing_columns)}"
+        )
 
     return go.Candlestick(
         x=data.index,
@@ -55,3 +58,48 @@ def create_candlestick(data: pd.DataFrame) -> go.Candlestick:
         low=data["Low"],
         close=data["Close"],
     )
+
+
+def plot_position(
+    price_data: pd.DataFrame, position_data: pd.DataFrame, asset_label: str
+) -> None:
+    """
+    Plots asset price and position size over time using a dual-axis plot, where the primary axis shows the asset price and the secondary axis shows the position size.
+
+    Args:
+        price_data (pd.DataFrame): A time series DataFrame containing the asset price, indexed by a `DatetimeIndex`.
+        position_data (pd.DataFrame): A time series DataFrame containing the position size, indexed by a `DatetimeIndex`.
+        asset_label (str): A string representing the asset's name, which is used in the plot's title.
+
+    Raises:
+        ValueError: If either `price_data` or `position_data` is not indexed by a `DatetimeIndex`.
+
+    Notes:
+        - The function creates a plot where the asset price is plotted on the left y-axis in red, and the position size on the right y-axis in blue.
+        - Ensure that both input DataFrames are aligned on the same time axis for accurate plotting.
+
+    Example:
+        >>> plot_position(price_data=df_price, position_data=df_position, asset_label="AAPL")
+    """
+
+    if not (
+        isinstance(price_data.index, pd.DatetimeIndex)
+        & isinstance(position_data.index, pd.DatetimeIndex)
+    ):
+        raise ValueError(
+            "Both `price_data` and `position_data` must be indexed by a `DatetimeIndex`."
+        )
+
+    fig, ax1 = plt.subplots()
+    ax1.plot(price_data, color="red")
+    ax1.set_xlabel("Date")
+    ax1.set_ylabel("Value (USD)", color="red")
+    ax1.tick_params(axis="y", labelcolor="red")
+
+    ax2 = ax1.twinx()
+    ax2.plot(position_data, color="blue")
+    ax2.set_ylabel("Position Size", color="blue")
+    ax2.tick_params(axis="y", labelcolor="blue")
+
+    plt.title(f"{asset_label} Price and Strategy Position Size Over Time")
+    plt.show()
