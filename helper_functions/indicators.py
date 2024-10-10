@@ -34,7 +34,7 @@ def _calculate_point_rsi(mean_upward: float, mean_downward: float) -> float:
         return 100
 
 
-def calculate_rsi(prices: np.array, period: int) -> np.ndarray:
+def rsi(prices: np.array, period: int) -> np.ndarray:
     """
     Calculates the Relative Strength Index (RSI) for a given price series.
 
