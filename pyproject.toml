@@ -24,6 +24,7 @@ scipy = "^1.14.1"
 ipywidgets = "^8.1.5"
 bokeh = "3.2.1"
 backtesting = "^0.3.3"
+loguru = "^0.7.2"
 
 
 [build-system]

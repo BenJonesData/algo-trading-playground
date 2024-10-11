@@ -52,21 +52,20 @@ def rsi(prices: np.array, period: int) -> np.ndarray:
         will be zeros because RSI cannot be calculated until `period` data
         points are available.
 
-    Raises:
-        ValueError: If the input prices series contains fewer than `period`
-        data points.
-
     Example:
         prices = pd.Series([44, 46, 45, 47, 44, 43, 42, 43, 44, 45])
         rsi_values = calculate_rsi(prices, 5)
     """
+    rsi = np.zeros(len(prices))
+
+    if len(prices) <= period:
+        return rsi
+
     prices = np.asarray(prices)
     deltas = np.diff(prices)
 
     upward_changes = np.where(deltas > 0, deltas, 0)
     downward_changes = np.where(deltas < 0, -deltas, 0)
-
-    rsi = np.zeros(len(prices))
 
     mean_upward = np.mean(upward_changes[:period])
     mean_downward = np.mean(downward_changes[:period])
