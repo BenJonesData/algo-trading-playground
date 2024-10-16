@@ -30,19 +30,6 @@ def create_candlestick(data: pd.DataFrame) -> go.Candlestick:
         ValueError: If the DataFrame is not indexed by a `DatetimeIndex` or if
         any of the required columns ('Open', 'High', 'Low', 'Close') are
         missing.
-
-    Example:
-        >>> import pandas as pd
-        >>> import plotly.graph_objects as go
-        >>> df = pd.DataFrame({
-        ...     'Open': [100.0, 102.5, 105.0],
-        ...     'High': [101.0, 103.0, 106.0],
-        ...     'Low': [99.0, 101.5, 104.5],
-        ...     'Close': [100.5, 102.0, 105.5]
-        ... }, index=pd.to_datetime([
-        ...     '2023-01-01', '2023-01-02', '2023-01-03'
-        ... ]))
-        >>> candlestick = create_candlestick(df)
     """
     if not isinstance(data.index, pd.DatetimeIndex):
         raise ValueError("The DataFrame must be indexed by a `DatetimeIndex`.")
@@ -91,13 +78,6 @@ def plot_position(
         left y-axis in red, and the position size on the right y-axis in blue.
         - Ensure that both input DataFrames are aligned on the same time axis
         for accurate plotting.
-
-    Example:
-        >>> plot_position(
-        ... price_data=df_price,
-        ... position_data=df_position,
-        ... asset_label="AAPL"
-        ... )
     """
 
     if not (

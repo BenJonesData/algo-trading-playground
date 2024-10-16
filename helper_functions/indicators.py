@@ -51,10 +51,6 @@ def rsi(prices: np.array, period: int) -> np.ndarray:
         np.ndarray: An array of RSI values, where the first `period` values
         will be zeros because RSI cannot be calculated until `period` data
         points are available.
-
-    Example:
-        prices = pd.Series([44, 46, 45, 47, 44, 43, 42, 43, 44, 45])
-        rsi_values = calculate_rsi(prices, 5)
     """
     rsi = np.zeros(len(prices))
 
