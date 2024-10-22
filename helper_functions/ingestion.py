@@ -83,6 +83,8 @@ def get_price_data_and_rsi(
         data['Ticker'] = t
         for period in rsi_periods:
             data[f'rsi_{period}'] = rsi(data['Close'], period)
+        
+        data['Return'] = data['Close'].pct_change()
 
         if remove_zeros:
             data = data.iloc[max(rsi_periods):]
