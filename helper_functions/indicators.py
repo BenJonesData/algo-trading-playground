@@ -57,7 +57,6 @@ def rsi(prices: np.array, period: int) -> np.ndarray:
     if len(prices) <= period:
         return rsi
 
-    prices = np.asarray(prices)
     deltas = np.diff(prices)
 
     upward_changes = np.where(deltas > 0, deltas, 0)
