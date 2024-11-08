@@ -2,21 +2,20 @@ import yfinance as yf
 import pandas as pd
 from helper_functions.indicators import rsi
 from loguru import logger
-from typing import List, Callable, Union
-from functools import wraps
+from typing import List, Union
 
 
 def get_price_data_and_rsi(
-    tickers:  Union[str, List[str]],
+    tickers: Union[str, List[str]],
     start_date: str,
     end_date: str,
     interval: str,
-    rsi_periods:  Union[int, List[int]],
+    rsi_periods: Union[int, List[int]],
     remove_zeros: bool = True,
     logger_batch_size: int = None,
 ) -> pd.DataFrame:
     """
-    Downloads price data for a given time period and interval, and calculates 
+    Downloads price data for a given time period and interval, and calculates
     a return column and RSI (Relative Strength Index) columns for each
     specified period.
 
@@ -47,7 +46,7 @@ def get_price_data_and_rsi(
         calculation.
 
     Notes:
-        - If `remove_zeros=True`, the function will remove the first 
+        - If `remove_zeros=True`, the function will remove the first
         `max(rsi_periods)` rows for each ticker, where there is insufficient
         data to calculate the RSI.
         - If `remove_zeros=False`, the initial rows of each RSI column will
@@ -56,7 +55,7 @@ def get_price_data_and_rsi(
         length of the RSI period. This will also mean that the first entry in
         the Return column for each ticker will be `NaN`.
     """
-    
+
     if isinstance(tickers, str):
         tickers = [tickers]
 
@@ -72,32 +71,37 @@ def get_price_data_and_rsi(
         tickers_downloaded = 0
     else:
         yfinance_progress = True
-    
-    output_list =[]
+
+    output_list = []
 
     for t in tickers:
         data = yf.download(
-            tickers=t, start=start_date, end=end_date, interval=interval, progress=yfinance_progress
+            tickers=t,
+            start=start_date,
+            end=end_date,
+            interval=interval,
+            progress=yfinance_progress,
         )
 
-        data['Ticker'] = t
+        data["Ticker"] = t
         for period in rsi_periods:
-            data[f'rsi_{period}'] = rsi(data['Close'], period)
-        
-        data['Return'] = data['Close'].pct_change()
+            data[f"rsi_{period}"] = rsi(data["Close"], period)
+
+        data["Return"] = data["Close"].pct_change()
 
         if remove_zeros:
             data = data.iloc[max(rsi_periods):]
-        
+
         if not yfinance_progress:
             tickers_downloaded += 1
-            if  tickers_downloaded % logger_batch_size == 0:
-                logger.info(f"{tickers_downloaded} of {len(tickers)} downloaded")
-        
+            if tickers_downloaded % logger_batch_size == 0:
+                logger.info(
+                    f"{tickers_downloaded} of {len(tickers)} downloaded"
+                )
+
         output_list.append(data)
-    
+
     output_df = pd.concat(output_list).reset_index()
-    output_df = output_df.set_index(['Ticker', 'Date'])
+    output_df = output_df.set_index(["Ticker", "Date"])
 
-
-    return(output_df)
+    return output_df
