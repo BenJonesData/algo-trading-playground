@@ -26,6 +26,8 @@ bokeh = "3.2.1"
 backtesting = "^0.3.3"
 loguru = "^0.7.2"
 seaborn = "^0.13.2"
+graphviz = "^0.20.3"
+networkx = "^3.4.2"
 
 
 [build-system]
